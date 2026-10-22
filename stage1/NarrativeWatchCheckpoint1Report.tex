@@ -18,7 +18,6 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.4em}
 \raggedbottom
-%%gowno do tych user stories
 \newcommand{\storyfront}[5]{%
   \par\noindent\fbox{%
     \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
@@ -116,8 +115,7 @@
   [\titlerule]
 
 
-\title{\textbf{NarrativeWatch}\\
-Checkpoint 1}
+\title{\textbf{NarrativeWatch} Checkpoint 1}
 
 \author{
     Karolina Małaśnicka \\
@@ -132,13 +130,14 @@ Checkpoint 1}
 \begin{document}
 
 \maketitle
+\vspace{-1.5cm}
 \tableofcontents
 \newpage
 
 \section{Project Overview}
 
 \subsection{Project Description}
-NarrativeWatch is a system designed to monitor, detect and analyze foreign information manipulation and interference (FIMI) narratives in online article and posts. The application collects content from selected sources and uses AI agents to find matches with known FIMI narratives. An LLM Judge checks these matches and provides explanations and confidence scores, while human analysts review uncertain cases. The goal is to detect potentially manipulative narratives before they spread widely.
+NarrativeWatch is a system designed to monitor, detect and analyze foreign information manipulation and interference (FIMI) narratives in online articles and posts. The application collects content from selected sources and uses AI agents to find matches with known FIMI narratives. An LLM Judge checks these matches and provides explanations and confidence scores, while human analysts review uncertain cases. The goal is to detect potentially manipulative narratives before they spread widely.
 
 \subsection{Main Features \& Architecture}
 NarrativeWatch consists of several components that work together to collect, analyze and verify online content.
@@ -198,7 +197,9 @@ As an analyst, I want to see the status and review decisions for my narrative
 proposals so that I know whether they are awaiting review, approved or rejected.
 
 \subsubsection*{US-12 -- View Analysis Results}
-As an analyst, I want to see the results of automatically collected and analyzed articles so that I do not have to search for disinformation narratives manually.
+
+
+As an analyst, I want collected articles to be automatically analyzed and potential narrative matches to be verified by the LLM Judge so that I can review the results without checking every article manually.
 
 \subsection{Admin User Stories}
 
@@ -215,7 +216,7 @@ As an admin, I want to update or remove existing narratives so that the narrativ
 
 \subsubsection* {US-16 -- View Reviewer Activity}
 As an admin, I want to view each reviewer's match decisions, narrative proposals
-and proposal reviews so that I can oversee the review process
+and proposal reviews so that I can oversee the review process.
 
 \subsubsection*{US-17 -- Add Known Narratives}
 
@@ -237,7 +238,7 @@ As a user, I want to log in to the application so that I can access the features
 
 
 
-\section{Detalied User Stories}
+\section{Detailed User Stories}
 The crucial requirements are specified as user story cards. Each front side
 states the role, feature and business justification. Each reverse side gives
 functional acceptance criteria and non-functional requirements as yes/no
@@ -245,7 +246,7 @@ questions. The UC identifiers refer to the diagrams in
 Section~\ref{sec:use-case-diagrams}.
 
 \subsection{US-05 -- View LLM Judge Results}
-\textbf{Related use case:} UC-05.
+\textbf{Related use case:} UC-A1 (Explore analysis results).
 
 \begin{figure}[H]
 \setlength{\fboxsep}{7pt}
@@ -292,7 +293,7 @@ Section~\ref{sec:use-case-diagrams}.
 
 \clearpage
 \subsection{US-06 -- Review Uncertain Matches}
-\textbf{Related use cases:} UC-06 and the included UC-07.\\
+\textbf{Related use cases:} UC-A2 (Review uncertain match).\\
 \textbf{Supporting user stories:} US-03--US-05 and US-07.
 
 \begin{figure}[H]
@@ -340,16 +341,16 @@ Section~\ref{sec:use-case-diagrams}.
 \end{figure}
 
 \clearpage
-\subsection{US-09 -- Add Monitored Sources}
-\textbf{Related use case:} UC-09.
+\subsection{US-13 -- Add Monitored Sources}
+\textbf{Related use case:} UC-D1 (Manage monitored sources).
 
 \begin{figure}[H]
 \setlength{\fboxsep}{7pt}
-\storyfront{US-09}{Add Monitored Sources}
+\storyfront{US-13}{Add Monitored Sources}
   {Admin}
   {add sources to monitor}
   {enable the system to collect articles and posts from them.}
-\caption{Front side of the US-09 user story card.}
+\caption{Front side of the US-13 user story card.}
 \end{figure}
 
 \begin{figure}[H]
@@ -384,7 +385,7 @@ Section~\ref{sec:use-case-diagrams}.
         administrators, including requests sent directly to the API?
 \end{itemize}
 \end{storyback}
-\caption{Reverse side of the US-09 user story card.}
+\caption{Reverse side of the US-13 user story card.}
 \end{figure}
 
 \clearpage
@@ -401,55 +402,87 @@ Human operations require authentication and the appropriate role.
 Actors outside the boundary represent people or external systems;
 internal agents remain part of NarrativeWatch.
 
+
 \subsection{Automatic Content Monitoring}
 
-Monitoring runs on a schedule. Collected posts and articles are analysed
-against known narratives; detected matches are assessed by the LLM Judge.
-The diagram shows responsibilities, not the order of processing.
+The monitoring process starts with collecting new articles
+and posts from selected sources. The Analysis Agent then
+matches the collected content with known FIMI narratives.
+Potential matches are verified by the LLM Judge.
+Depending on the results, the system may create alerts
+or send uncertain matches for human review.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1cm,y=1cm,
-  usecase/.append style={minimum width=7.8cm,text width=5.3cm}]
-  \draw[boundary] (2.1,1.8) rectangle (14.4,-9);
+  usecase/.append style={
+    minimum width=7cm,
+    text width=5cm
+  }]
+
+  \draw[boundary] (2.1,1.8) rectangle (14.4,-12.3);
+
   \node[font=\bfseries,text=ink] at (8.25,1.3)
     {NarrativeWatch --- Monitoring};
-  \umlactor{platform}{.55}{0}{Content\\platform}
-  \umlactor{provider}{.55}{-3.5}{LLM\\provider}
+
+  \umlactor{platform}{.55}{0}
+    {Content\\platform}
+
+  \umlactor{provider}{.55}{-6}
+    {LLM\\provider}
 
   \node[usecase] (collect) at (8.25,0)
-    {\textbf{UC-M1}\\Collect and analyse content};
-  \node[usecase] (verify) at (8.25,-3.5)
-    {\textbf{UC-M2}\\Verify narrative match};
-  \node[usecase,minimum width=5cm,text width=3.3cm] (queue) at (5.2,-7.4)
-    {\textbf{UC-M3}\\Queue match for\\human review};
-  \node[usecase,minimum width=5cm,text width=3.3cm] (alert) at (11.3,-7.4)
-    {\textbf{UC-M4}\\Create alert};
+    {\textbf{UC-M1}\\Collect content};
 
-  \draw[association] (platform)--(collect.west);
-  \draw[association] (provider)--(verify.west);
-  \draw[dashed,-{Straight Barb[length=2mm]},draw=ink,line width=.7pt]
+  \node[usecase] (analyse) at (8.25,-3)
+    {\textbf{UC-M2}\\Analyse collected content};
+
+  \node[usecase] (verify) at (8.25,-6)
+    {\textbf{UC-M3}\\Verify narrative match};
+
+  \node[usecase,minimum width=5cm,text width=3.5cm]
+    (queue) at (5.2,-10)
+    {\textbf{UC-M4}\\Queue match for\\human review};
+
+  \node[usecase,minimum width=5cm,text width=3.5cm]
+    (alert) at (11.3,-10)
+    {\textbf{UC-M5}\\Create alert};
+
+  \draw[association]
+    (platform)--(collect.west);
+
+  \draw[association]
+    (provider)--(verify.west);
+
+  \draw[dashed,-{Straight Barb[length=2mm]},
+    draw=ink,line width=.7pt]
     (queue.north)--node[above,sloped,font=\scriptsize]
-    {$\langle\!\langle$extend$\rangle\!\rangle$}(verify.south west);
-    \draw[dashed,-{Straight Barb[length=2mm]},draw=ink,line width=.7pt]
+    {$\langle\!\langle$extend$\rangle\!\rangle$}
+    (verify.south west);
+
+  \draw[dashed,-{Straight Barb[length=2mm]},
+    draw=ink,line width=.7pt]
     (alert.north)--node[above,sloped,font=\scriptsize]
-    {$\langle\!\langle$extend$\rangle\!\rangle$}(verify.south east);
+    {$\langle\!\langle$extend$\rangle\!\rangle$}
+    (verify.south east);
+
 \end{tikzpicture}
-\caption{Automatic monitoring and conditional actions after a Judge assessment.}
+
+\caption{Automatic content collection, narrative analysis
+and verification.}
 \label{fig:monitoring-use-cases}
 \end{figure}
 
-The extension point in UC-M2 is the completion of the assessment.
-UC-M3 applies when confidence is below the configured review threshold;
-UC-M4 applies when the alert rules are satisfied. Both extensions may apply
-to the same match. Human review itself takes place later, through UC-A2.
-The LLM provider is an external actor when the model is accessed through
-an external service.
+UC-M1 is handled by the Crawler Agent, UC-M2 by the
+Analysis Agent and UC-M3 by the LLM Judge Module.
+UC-M4 is triggered when a match requires human review,
+while UC-M5 is triggered when the alert conditions are met.
+
 
 \clearpage
 \subsection{Analysis and Human Review}
 
-These goals cover US-01--US-08 and US-16. Inspecting a result includes its
+These goals cover US-01--US-08 and US-12. Inspecting a result includes its
 content, source, matched narrative, analysis score and Judge assessment.
 Each narrative match is reviewed independently.
 
@@ -525,9 +558,10 @@ uncertain-match review.
 \clearpage
 \subsection{Administration}
 
-Source and narrative management cover adding, updating and removing
-resources (US-09--US-12). Reviewer activity provides oversight of the
-review process.
+
+The administration use cases cover US-13--US-17.
+They include managing monitored sources, managing known
+FIMI narratives and viewing reviewer activity.
 
 \begin{figure}[H]
 \centering
@@ -554,11 +588,61 @@ review process.
 
 UC-D3 shows the matches a reviewer confirmed or rejected, their proposed
 narratives and their decisions on other analysts' proposals.
-Login, logout and role-based permissions are specified by US-13--US-15.
+Login, logout and role-based permissions are described
+in US-18--US-20.
+
 
 \clearpage
+\subsection{Communication Between Analysis and LLM Judge Modules}
+
+The Analysis Module sends potential narrative matches
+to the LLM Judge Module for verification.
+The LLM Judge checks each match and returns a decision,
+an explanation and a confidence score.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,
+  usecase/.append style={
+    minimum width=6.2cm,
+    text width=4.5cm
+  }]
+
+  \draw[boundary] (4,1) rectangle (14,-3.6);
+
+  \node[font=\bfseries,text=ink] at (9,0.5)
+    {LLM Judge Module};
+
+  \umlactor{analysisactor}{1.5}{-1.5}
+    {Analysis\\Module}
+
+  \node[usecase] (verify) at (9,-1.5)
+    {\textbf{UC-J1}\\Verify narrative match};
+
+  \draw[association]
+    (analysisactor)--(verify.west);
+
+\end{tikzpicture}
+
+\caption{Communication between the Analysis Module
+and the LLM Judge Module.}
+\label{fig:judge-module-use-case}
+\end{figure}
+
+The Analysis Module is a non-human actor in this diagram
+because it interacts with the LLM Judge Module
+through a service interface.
+
+The service receives a candidate narrative match
+and returns a verification result containing
+a decision, explanation and confidence score.
+
+UC-J1 describes the verification service of the LLM Judge
+Module, which is also represented by UC-M3
+in the monitoring diagram.
 
 
+\clearpage
 
 
 \begin{landscape}
@@ -566,8 +650,7 @@ Login, logout and role-based permissions are specified by US-13--US-15.
 \captionsetup{skip=4pt}
 \section{Class Diagrams}
 
-The two views show the main data and service dependencies. Routine technical
-fields, such as identifiers and user names, are omitted.
+The diagrams show domain classes that represent data and relationships and service classes that handle communication between modules.
 
 \subsection{Domain Classes and Relationships}
 
@@ -754,6 +837,3 @@ to the same match. ReviewService records decisions and narrative proposals.}
 
 
 \end{document}
-
-
-%mozecie mi oblodzic za to
