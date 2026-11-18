@@ -1,11 +1,18 @@
-
 # NarrativeWatch
 
 NarrativeWatch is a platform for tracking foreign disinformation (FIMI) narratives in online articles and posts.
 
 The application collects content from selected sources and uses AI agents to find matches with known disinformation narratives. An LLM Judge checks these matches and gives a confidence score. If the result is uncertain, a human analyst will review it. The goal is to spot manipulative narratives before they spread widely.
 
-NarrativeWatch will have a dashboard for viewing detected narratives and alerts, an admin panel for managing sources and a backend that handles communication between the different parts of the system.
+NarrativeWatch will have a dashboard for viewing detected narratives and alerts, an admin panel for managing sources, and a backend that handles communication between the different parts of the system.
+
+## Documentation
+
+The project documentation is divided into three checkpoints:
+
+- **Checkpoint 1 – Requirements and System Design:** User stories, use case diagrams, detailed use cases, and class diagrams.
+- **Checkpoint 2 – Behavioral Design:** State diagrams and activity diagrams describing system workflows.
+- **Checkpoint 3 – Communication Design:** Sequence diagrams, REST API specification, JSON message schemas, and error handling.
 
 ## Team
 
